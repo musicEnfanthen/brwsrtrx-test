@@ -27,7 +27,10 @@ jobs:
           url=${url/https:\/\//}   # remove https://
           url=${url//\./-}         # replace all . with -
           url=${url//\//_}         # replace all / with _
-          ${url:0:(-1)}=${${url:0:(-1)}//\//_}
+          if [[ ${url:0:(-1)} -eq]]
+          then 
+            url=${url:0:(-1)}
+          fi
           
           echo $url
           echo COLLECTION=$url >> $GITHUB_ENV
