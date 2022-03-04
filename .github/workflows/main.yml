@@ -27,8 +27,9 @@ jobs:
           url=${url/https:\/\//}   # remove https://
           url=${url//\./-}         # replace all . with -
           url=${url//\//_}         # replace all / with _
-          echo $url
+          ${url:0:(-1)}=${${url:0:(-1)}//\//_}
           
+          echo $url
           echo COLLECTION=$url >> $GITHUB_ENV
       
       - name: Get subdomain include from url
@@ -49,7 +50,7 @@ jobs:
         run: docker pull webrecorder/browsertrix-crawler
       
       - name: Crawl site
-        run: docker run -v $PWD/crawls:/crawls/ webrecorder/browsertrix-crawler crawl --workers 16 --saveState always --url ${{ github.event.inputs.url }} --seeds [${{ github.event.inputs.url }}] --include ${{ env.INCLUDE_PATH }} --generateWACZ --text --collection ${{ env.COLLECTION }}
+        run: docker run -v $PWD/crawls:/crawls/ webrecorder/browsertrix-crawler crawl --workers 16 --saveState always --url ${{ github.event.inputs.url }} --seeds ${{ github.event.inputs.url }} --include ${{ env.INCLUDE_PATH }} --generateWACZ --text --collection ${{ env.COLLECTION }}
      
       - run: ls -R
      
