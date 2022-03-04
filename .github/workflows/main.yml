@@ -30,6 +30,18 @@ jobs:
           
           echo COLLECTION=$url >> $GITHUB_ENV
       
+      - name: Get subdomain include from url
+        run: |
+          includePath=${{ github.event.inputs.url }}
+          includePath=${includePath/http:\/\//}    # remove http://
+          includePath=${includePath/https:\/\//}   # remove https://
+          includePath=${includePath/www./}         # remove www.
+          includePath=${includePath/./\\\.}        # replace . with \.
+          includePath=".*\.${includePath}"         # add prefix
+          
+          echo $includePath
+          
+      
       - name: Setup docker
         run: docker pull webrecorder/browsertrix-crawler
       
