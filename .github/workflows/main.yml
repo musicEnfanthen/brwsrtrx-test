@@ -27,7 +27,7 @@ jobs:
           url=${url/https:\/\//}   # remove https://
           url=${url//\./-}         # replace all . with -
           url=${url//\//_}         # replace all / with _
-          if [[ ${url:0:(-1)} -e "_" ]]
+          if [[ ${url:0:(-1)} -eq "_" ]]
           then 
             url=${url:0:(-1)}
           fi
