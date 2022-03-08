@@ -3,14 +3,18 @@ on:
   workflow_dispatch: # trigger manually
     inputs:
         url:
-          description: 'Url to crawl'
+          description: "Url to crawl"
           required: true
+        scopetype:
+          description: "Scope type"
+          required: false
+          default: "domain"
 
 # globals
 env:
 # build artifacts
   COLLECTION: ""
-  INCLUDE_PATH: ""
+  SCOPE_TYPE: "domain"
 
 jobs:
   crawl_url:
@@ -34,26 +38,13 @@ jobs:
           
           echo $url
           echo COLLECTION=$url >> $GITHUB_ENV
-      
-      - name: Get subdomain include from url
-        run: |
-          includePath=${{ github.event.inputs.url }}
-          includePath=${includePath/http:\/\//}    # remove http://
-          includePath=${includePath/https:\/\//}   # remove https://
-          includePath=${includePath/www./}         # remove www.
-          includePath=${includePath/./\\\.}        # replace . with \.
-          includePath=".*\.${includePath}"         # add prefix
-          
-          echo $includePath
-          
-          echo INCLUDE_PATH=$includePath >> $GITHUB_ENV
           
       
       - name: Setup docker
         run: docker pull webrecorder/browsertrix-crawler
       
       - name: Crawl site
-        run: docker run -v $PWD/crawls:/crawls/ webrecorder/browsertrix-crawler crawl --workers 16 --saveState always --url ${{ github.event.inputs.url }} --seeds ${{ github.event.inputs.url }} --include ${{ env.INCLUDE_PATH }} --generateWACZ --text --collection ${{ env.COLLECTION }}
+        run: docker run -v $PWD/crawls:/crawls/ webrecorder/browsertrix-crawler crawl --workers 16 --saveState always --url ${{ github.event.inputs.url }} --seeds ${{ github.event.inputs.url }} --scopeType ${{ github.event.inputs.scopetype }} --generateWACZ --text --collection ${{ env.COLLECTION }}
      
       - run: ls -R
      
