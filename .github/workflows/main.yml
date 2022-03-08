@@ -14,7 +14,6 @@ on:
 env:
 # build artifacts
   COLLECTION: ""
-  SCOPE_TYPE: "domain"
 
 jobs:
   crawl_url:
@@ -41,7 +40,7 @@ jobs:
           
       
       - name: Setup docker
-        run: docker pull webrecorder/browsertrix-crawler
+        run: docker pull webrecorder/browsertrix-crawler:latest
       
       - name: Crawl site
         run: docker run -v $PWD/crawls:/crawls/ webrecorder/browsertrix-crawler crawl --workers 16 --saveState always --url ${{ github.event.inputs.url }} --seeds ${{ github.event.inputs.url }} --scopeType ${{ github.event.inputs.scopetype }} --generateWACZ --text --collection ${{ env.COLLECTION }}
