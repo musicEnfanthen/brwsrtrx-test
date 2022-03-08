@@ -12,19 +12,19 @@ on:
         include_one:
           description: "Include 1"
           required: false
-          default: ""
+          default: "x"
         include_two:
           description: "Include 2"
           required: false
-          default: ""
+          default: "y"
         exclude_one:
           description: "Exclude 1"
           required: false
-          default: ""
+          default: "x"
         exclude_two:
           description: "Exclude 2"
           required: false
-          default: ""
+          default: "y"
 
 
 # globals
