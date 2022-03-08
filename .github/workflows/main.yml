@@ -68,7 +68,7 @@ jobs:
       - name: Set include option 1
         if: ${{ github.event.inputs.include_one}}
         run: |
-          in=${{ github.event.inputs.include_one}}
+          in="--include ${{ github.event.inputs.include_one}}"
           echo INCLUDE_ONE=$in >> $GITHUB_ENV 
       
       - name: Crawl site
@@ -80,10 +80,10 @@ jobs:
           --url ${{ github.event.inputs.url }} 
           --seeds ${{ github.event.inputs.url }} 
           --scopeType ${{ github.event.inputs.scopetype }} 
-          --include ${{ env.INCLUDE_ONE }} 
-          --include ${{ github.event.inputs.include_two }} 
-          --exclude ${{ github.event.inputs.exclude_one }} 
-          --exclude ${{ github.event.inputs.exclude_two }} 
+          ${{ env.INCLUDE_ONE }} 
+          ${{ github.event.inputs.include_two }} 
+          ${{ github.event.inputs.exclude_one }} 
+          ${{ github.event.inputs.exclude_two }} 
           --generateWACZ 
           --text 
           --collection ${{ env.COLLECTION }}
