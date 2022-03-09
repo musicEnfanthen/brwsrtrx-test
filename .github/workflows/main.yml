@@ -43,7 +43,10 @@ jobs:
     
       - name: Checkout repo
         uses: actions/checkout@v2
-      
+        
+      - name: Setup docker
+        run: docker pull webrecorder/browsertrix-crawler:latest
+       
       - name: Get collection name from URL
         run: |
           url=${{ github.event.inputs.url }}
@@ -61,10 +64,6 @@ jobs:
           echo $url
           echo COLLECTION=$url >> $GITHUB_ENV
           
-      
-      - name: Setup docker
-        run: docker pull webrecorder/browsertrix-crawler:latest
-      
       - name: Set include option 1
         if: ${{ github.event.inputs.include_one}}
         run: |
@@ -91,19 +90,19 @@ jobs:
       
       - name: Crawl site
         run: >
-          docker run 
-          -v $PWD/crawls:/crawls/ webrecorder/browsertrix-crawler crawl 
-          --workers 16 
-          --saveState always 
-          --url ${{ github.event.inputs.url }} 
-          --seeds ${{ github.event.inputs.url }} 
-          --scopeType ${{ github.event.inputs.scopetype }} 
-          ${{ env.INCLUDE_ONE }} 
-          ${{ env.INCLUDE_TWO }} 
-          ${{ env.EXCLUDE_ONE }} 
-          ${{ env.EXCLUDE_TWO }} 
-          --generateWACZ 
-          --text 
+          docker run
+          -v $PWD/crawls:/crawls/ webrecorder/browsertrix-crawler crawl
+          --workers 16
+          --saveState always
+          --url ${{ github.event.inputs.url }}
+          --seeds ${{ github.event.inputs.url }}
+          --scopeType ${{ github.event.inputs.scopetype }}
+          ${{ env.INCLUDE_ONE }}
+          ${{ env.INCLUDE_TWO }}
+          ${{ env.EXCLUDE_ONE }}
+          ${{ env.EXCLUDE_TWO }}
+          --generateWACZ
+          --text
           --collection ${{ env.COLLECTION }}
      
       - run: ls -R
